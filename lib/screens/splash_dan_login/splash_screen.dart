@@ -14,7 +14,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 5), () {
+    Timer(const Duration(seconds: 2), () {
       Navigator.of(context).pushReplacement(
         PageRouteBuilder(
           transitionDuration: const Duration(milliseconds: 700),
@@ -31,19 +31,19 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Center(child: Image.asset("assets/images/logo1.png")),
-          Center(
-            child: Text(
-              "Bernaldi Atma Tanjung Suteja",
-              style: TextStyle(fontSize: 20, fontFamily: "UrbanistBold"),
-            ),
-          ),
-        ],
-      ),
+      // backgroundColor: Colors.white,
+      // body: Column(
+      //   mainAxisAlignment: MainAxisAlignment.center,
+      //   children: [
+      //     Center(child: Image.asset("assets/images/logo1.png")),
+      //     Center(
+      //       child: Text(
+      //         "Bernaldi Atma Tanjung Suteja",
+      //         style: TextStyle(fontSize: 20, fontFamily: "UrbanistBold"),
+      //       ),
+      //     ),
+      //   ],
+      // ),
     );
   }
 }

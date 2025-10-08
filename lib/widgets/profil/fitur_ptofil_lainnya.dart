@@ -11,8 +11,7 @@ class FiturProfilLainnya extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Padding(
+    return Padding(
         padding: const EdgeInsets.only(bottom: 50),
         child: Container(
           height: double.infinity,
@@ -47,7 +46,6 @@ class FiturProfilLainnya extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 }
