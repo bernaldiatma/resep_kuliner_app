@@ -1,10 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:resep_app_v2/widgets/home/scroll_kategori.dart';
+import 'package:resep_app_v2/screens/splash_dan_login/user_preferences.dart';
 
-import '../../model/user_data.dart';
-
-class Header extends StatelessWidget {
+class Header extends StatefulWidget {
   const Header({Key? key}) : super(key: key);
+
+  @override
+  State<Header> createState() => _HeaderState();
+}
+
+class _HeaderState extends State<Header> {
+  String _username = "User";
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    final userData = await UserPreferences.getUserData();
+    setState(() {
+      _username = userData['username'] ?? "User";
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +53,7 @@ class Header extends StatelessWidget {
                       ),
                       const SizedBox(width: 12),
                       Text(
-                        "Halo,${UserData.username ?? "User"} !👋",
+                        "Halo,$_username !👋",
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,

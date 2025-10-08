@@ -1,30 +1,44 @@
 import 'package:flutter/material.dart';
-import 'package:resep_app_v2/model/user_data.dart';
-import 'package:resep_app_v2/screens/splash_dan_login/login_screen.dart';
-import 'login_coba_coba.dart';
+import 'package:resep_app_v2/screens/splash_dan_login/user_preferences.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  _RegisterScreenState createState() => _RegisterScreenState();
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
   bool _isPasswordVisible = false;
-  final _usernameController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
 
-  void _register() {
-    UserData.username = _usernameController.text;
-    UserData.email = _emailController.text;
-    UserData.password = _passwordController.text;
+  void _register() async {
+    if (usernameController.text.isEmpty ||
+        emailController.text.isEmpty ||
+        passwordController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Semua field harus diisi")),
+      );
+      return;
+    }
 
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (_) => const LoginScreen()),
+    await UserPreferences.saveUserData(
+      usernameController.text,
+      emailController.text,
+      passwordController.text,
     );
+
+    usernameController.clear();
+    emailController.clear();
+    passwordController.clear();
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Registrasi berhasil, silakan login")),
+    );
+
+    Navigator.pop(context); // kembali ke login
   }
 
   @override
@@ -46,7 +60,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  "Selamat Datang 👋",
+                  "Buat Akun Baru ✨",
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
@@ -56,73 +70,47 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 const SizedBox(height: 8),
                 const Text(
-                  "Silakan register untuk melanjutkan",
+                  "Isi data berikut untuk mendaftar",
                   style: TextStyle(fontSize: 16, color: Colors.black54),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 16),
                 TextField(
-                  controller: _usernameController,
+                  controller: usernameController,
                   decoration: InputDecoration(
                     labelText: "Username",
-                    labelStyle: TextStyle(color: Colors.black54),
-                    hintText: "Masukkan Username",
-                    hintStyle: TextStyle(color: Colors.black54),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black, width: 2),
+                    border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black45, width: 1),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    prefixIcon: Icon(Icons.person),
+                    prefixIcon: const Icon(Icons.person),
                   ),
-                  //keyboardType: TextInputType.name,
                 ),
                 const SizedBox(height: 16),
                 TextField(
-                  controller: _emailController,
+                  controller: emailController,
                   decoration: InputDecoration(
                     labelText: "Email",
-                    labelStyle: TextStyle(color: Colors.black54),
-                    hintText: "Masukkan Email",
-                    hintStyle: TextStyle(color: Colors.black54),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black54, width: 2),
+                    border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black45, width: 1),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    prefixIcon: Icon(Icons.mail),
+                    prefixIcon: const Icon(Icons.mail),
                   ),
-                  //keyboardType: TextInputType.emailAddress,
+                  keyboardType: TextInputType.emailAddress,
                 ),
                 const SizedBox(height: 16),
                 TextField(
-                  controller: _passwordController,
+                  controller: passwordController,
                   obscureText: !_isPasswordVisible,
                   decoration: InputDecoration(
                     labelText: "Password",
-                    labelStyle: TextStyle(color: Colors.black54),
-                    hintText: "Masukkan Password",
-                    hintStyle: TextStyle(color: Colors.black54),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black54, width: 2),
+                    border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black45, width: 1),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    prefixIcon: Icon(Icons.lock_outline),
+                    prefixIcon: const Icon(Icons.lock_outline),
                     suffixIcon: IconButton(
                       icon: Icon(
                         _isPasswordVisible
                             ? Icons.visibility
                             : Icons.visibility_off,
-                        color: Colors.black54,
                       ),
                       onPressed: () {
                         setState(() {
@@ -143,7 +131,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   onPressed: _register,
                   child: const Text(
-                    "Register",
+                    "Daftar",
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,

@@ -17,7 +17,6 @@ class ProfilScreen extends StatelessWidget {
           ),
           Container(
               height: 300,
-              //color: Colors.orange[800],
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.bottomCenter,

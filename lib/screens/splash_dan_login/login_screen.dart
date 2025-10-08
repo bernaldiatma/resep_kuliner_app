@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:resep_app_v2/model/user_data.dart';
-import 'package:resep_app_v2/screens/main_screen.dart';
 import 'package:resep_app_v2/screens/splash_dan_login/register_screen.dart';
+import 'package:resep_app_v2/screens/main_screen.dart';
+import 'package:resep_app_v2/screens/splash_dan_login/user_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -11,20 +11,25 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
   bool _isPasswordVisible = false;
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
 
-  void _login() {
-    if (_emailController.text == UserData.email &&
-        _passwordController.text == UserData.password) {
+  void _login() async {
+    bool isValid = await UserPreferences.checkLogin(
+      emailController.text,
+      passwordController.text,
+    );
+
+    if (isValid) {
+      var userData = await UserPreferences.getUserData();
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => const MainScreen()),
+        MaterialPageRoute(builder: (context) => MainScreen()),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Email atau Password salah")),
+        const SnackBar(content: Text("Email atau password salah")),
       );
     }
   }
@@ -58,51 +63,59 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 8),
                 const Text(
-                  "Silahkan login untuk melanjutkan",
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.black54,
-                    fontFamily: "UrbanistBold",
-                  ),
+                  "Silakan login untuk melanjutkan",
+                  style: TextStyle(fontSize: 16, color: Colors.black54),
                 ),
                 const SizedBox(height: 16),
                 TextField(
-                  controller: _emailController,
+                  controller: emailController,
                   decoration: InputDecoration(
                     labelText: "Email",
-                    labelStyle: TextStyle(color: Colors.black54),
+                    labelStyle: const TextStyle(color: Colors.black54),
                     hintText: "Masukkan Email",
-                    hintStyle: TextStyle(color: Colors.black54),
+                    hintStyle: const TextStyle(color: Colors.black54),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black54, width: 2),
+                      borderSide: const BorderSide(
+                        color: Colors.black54,
+                        width: 2,
+                      ),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black45, width: 1),
+                      borderSide: const BorderSide(
+                        color: Colors.black45,
+                        width: 1,
+                      ),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    prefixIcon: Icon(Icons.mail),
+                    prefixIcon: const Icon(Icons.mail),
                   ),
                   keyboardType: TextInputType.emailAddress,
                 ),
                 const SizedBox(height: 16),
                 TextField(
-                  controller: _passwordController,
+                  controller: passwordController,
                   obscureText: !_isPasswordVisible,
                   decoration: InputDecoration(
                     labelText: "Password",
-                    labelStyle: TextStyle(color: Colors.black54),
+                    labelStyle: const TextStyle(color: Colors.black54),
                     hintText: "Masukkan Password",
-                    hintStyle: TextStyle(color: Colors.black54),
+                    hintStyle: const TextStyle(color: Colors.black54),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black54, width: 2),
+                      borderSide: const BorderSide(
+                        color: Colors.black54,
+                        width: 2,
+                      ),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black45, width: 1),
+                      borderSide: const BorderSide(
+                        color: Colors.black45,
+                        width: 1,
+                      ),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    prefixIcon: Icon(Icons.lock_outline),
+                    prefixIcon: const Icon(Icons.lock_outline),
                     suffixIcon: IconButton(
                       icon: Icon(
                         _isPasswordVisible
@@ -141,7 +154,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Center(
                   child: TextButton(
                     onPressed: () {
-                      Navigator.pushReplacement(
+                      Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (_) => const RegisterScreen(),
